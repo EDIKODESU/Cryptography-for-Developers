@@ -39,7 +39,5 @@ int main() {
 
 Приклад Результату
 Вихідна програма виведе результати тестів S-Box та P-Box. Наприклад:
-S-Box Test:
-Plaintext: 53
-Encrypted: ed
-Decrypted: 53
+![image](https://github.com/EDIKODESU/Cryptography-for-Developers/assets/93082954/ff84deb6-fb15-4d3e-a14a-68c429f33806)
+
