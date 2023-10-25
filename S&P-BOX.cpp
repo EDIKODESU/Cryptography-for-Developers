@@ -1,4 +1,4 @@
-﻿#include <vector>
+#include <vector>
 #include <iostream>
 #include <cstdint>
 
@@ -16,12 +16,14 @@ const vector<vector<uint8_t>> SBox = {
     {0x51, 0xA3, 0x40, 0x8F, 0x92, 0x9D, 0x38, 0xF5, 0xBC, 0xB6, 0xDA, 0x21, 0x10, 0xFF, 0xF3, 0xD2},
 };
 
+// Function to perform substitution using the S-Box
 uint8_t SBoxEncrypt(uint8_t input) {
     uint8_t row = (input >> 4) & 0x0F;    // First 4 bits
     uint8_t col = input & 0x0F;          // Last 4 bits
     return SBox[row][col];
 }
 
+// Function to reverse the substitution done by the S-Box
 uint8_t SBoxDecrypt(uint8_t input) {
     for (int row = 0; row < 16; row++) {
         for (int col = 0; col < 16; col++) {
@@ -33,6 +35,7 @@ uint8_t SBoxDecrypt(uint8_t input) {
     return 0xFF; 
 }
 
+// Function to perform bit permutation
 uint8_t PBox(uint8_t input) {
     uint8_t output_data = 0;
     for (int i = 0; i < 8; i++) {
@@ -41,6 +44,7 @@ uint8_t PBox(uint8_t input) {
     return output_data;
 }
 
+// Function to run tests on S-Box and P-Box functions
 void runTests() {
     // Test of the SBoxEncrypt function
     uint8_t plaintext_S = 0x53;
