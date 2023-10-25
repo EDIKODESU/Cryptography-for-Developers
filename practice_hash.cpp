@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -31,6 +31,8 @@ public:
 
     // Вивід числа у шістнадцятковому форматі.
     std::string toHex() const;
+
+    void setHex(const std::string& hex);
 
     bool operator>=(const BigInt& other) const {
         if (number.size() > other.number.size()) {
@@ -180,6 +182,21 @@ std::string BigInt::toHex() const {
     return hexStr;
 }
 
+void BigInt::setHex(const std::string& hex) {
+    const int blockSize = 8;
+    number.clear();
+
+    for (int i = hex.length(); i > 0; i -= blockSize) {
+        int start = std::max(i - blockSize, 0);
+        int end = i;
+        std::string hexBlock = hex.substr(start, end - start);
+        unsigned int intBlock = std::stoul(hexBlock, 0, 16);
+        number.push_back(intBlock);
+    }
+
+    CheckSize();
+}
+
 BigInt BigInt::OR(const BigInt& other) const {
     BigInt result(*this); 
 
@@ -223,21 +240,18 @@ BigInt BigInt::shiftR(int n) const {
 }
 
 BigInt BigInt::shiftL(int n) const {
-    BigInt result(*this); 
+    BigInt result(*this);
 
     if (n > 0) {
-        int carry = 0; 
+        int carry = 0;
         for (int i = result.number.size() - 1; i >= 0; --i) {
             int shiftedBlock = result.number[i] << n;
             result.number[i] = (result.number[i] << n) | carry;
             carry = shiftedBlock >> 32;
         }
-
-        if (carry > 0) {
-            result.number.insert(result.number.begin(), carry);
-        }
     }
 
+    result.CheckSize();
     return result;
 }
 
@@ -281,7 +295,8 @@ BigInt BigInt::MOD(const BigInt& other) const {
 int main() {
 
     // XOR
-    BigInt numberA("51bf608414ad5726a3c1bec098f77b1b54ffb2787f8d528a74c1d7fde6470ea4");
+    BigInt numberA("0");
+    numberA.setHex("51bf608414ad5726a3c1bec098f77b1b54ffb2787f8d528a74c1d7fde6470ea4");
     BigInt numberB("403db8ad88a3932a0b7e8189aed9eeffb8121dfac05c3512fdb396dd73f6331c");
     BigInt resultXOR = numberA.XOR(numberB);
     std::cout << "XOR Result: " << resultXOR.toHex() << std::endl;
@@ -297,6 +312,39 @@ int main() {
     BigInt numberF("22e962951cb6cd2ce279ab0e2095825c141d48ef3ca9dabf253e38760b57fe03");
     BigInt resultSUB = numberE.SUB(numberF);
     std::cout << "SUB Result: " << resultSUB.toHex() << std::endl;
+
+    // SHIFTL
+    BigInt numberShiftL("0xabcd ");
+    BigInt resultShiftL = numberShiftL.shiftL(3);
+    std::cout << "ShiftL Result: " << resultShiftL.toHex() << std::endl;
+
+    // SHIFTR
+    BigInt numberShiftR("0xabcd ");
+    BigInt resultShiftR = numberShiftR.shiftR(3);
+    std::cout << "ShiftR Result: " << resultShiftR.toHex() << std::endl;
+    
+    // INV
+    BigInt numberG("51bf608414ad5726a3c1bec098f77b1b54ffb2787f8d528a74c1d7fde6470ea4");
+    BigInt resultINV = numberG.INV(numberG);
+    std::cout << "INV Result: " << resultINV.toHex() << std::endl;
+
+    // OR
+    BigInt numberH("51bf608414ad5726a3c1bec098f77b1b54ffb2787f8d528a74c1d7fde6470ea4");
+    BigInt numberI("403db8ad88a3932a0b7e8189aed9eeffb8121dfac05c3512fdb396dd73f6331c");
+    BigInt resultOR = numberH.OR(numberI);
+    std::cout << "OR Result: " << resultOR.toHex() << std::endl;
+
+    // AND
+    BigInt numberJ("51bf608414ad5726a3c1bec098f77b1b54ffb2787f8d528a74c1d7fde6470ea4");
+    BigInt numberK("403db8ad88a3932a0b7e8189aed9eeffb8121dfac05c3512fdb396dd73f6331c");
+    BigInt resultAND = numberJ.AND(numberK);
+    std::cout << "AND Result: " << resultAND.toHex() << std::endl;
+
+    // MOD
+    BigInt numberL("123456789abcdef0123456789abcdef0");
+    BigInt numberM("1000000000000000000000000000000");
+    BigInt resultMOD = numberL.MOD(numberM);
+    std::cout << "MOD Result: " << resultMOD.toHex() << std::endl;
 
     return 0;
 }
