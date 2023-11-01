@@ -3,7 +3,6 @@
 #include <unordered_map>
 #include <string>
 #include <Windows.h>
-#include <random>
 
 using namespace std;
 
@@ -96,10 +95,10 @@ bool pokerTest(const vector<int>& sequence) {
     return false;
 }
 
-bool seriesLengthTest(const std::vector<int>& sequence) {
+bool seriesLengthTest(const vector<int>& sequence) {
     // Ініціалізуємо лічильники для кількості серій одиниць та нулів різної довжини
-    std::vector<int> onesCounts(7, 0);
-    std::vector<int> zerosCounts(7, 0);
+    vector<int> onesCounts(7, 0);
+    vector<int> zerosCounts(7, 0);
 
     int currentCount = 1;
     int currentBit = sequence[0];
@@ -149,17 +148,13 @@ bool seriesLengthTest(const std::vector<int>& sequence) {
     return true;
 }
 
-
-
 // Функція для генерації випадкової послідовності бітів
-std::vector<int> generateRandomSequence(int length) {
-    std::vector<int> sequence;
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> dist(0, 1);
+vector<int> generateRandomSequence(int length) {
+    vector<int> sequence;
+    srand(static_cast<unsigned>(time(0))); // Ініціалізація генератора випадкових чисел за поточним часом
 
     for (int i = 0; i < length; i++) {
-        int bit = dist(gen); // Генерувати випадковий біт (0 або 1)
+        int bit = rand() % 2; // Генерувати випадковий біт (0 або 1)
         sequence.push_back(bit);
     }
 
