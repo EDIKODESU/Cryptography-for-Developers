@@ -24,9 +24,6 @@ def is_on_curve_check(a):
     curve = ec.SECP256R1()
     try:
         point = ec.EllipticCurvePublicNumbers(int(a.X), int(a.Y), curve).public_key(default_backend()).public_numbers()
-        curve.verify(
-            point, b"\x00", b"\x00", ec.ECDSA(hashes.SHA256())
-        )
         return True
     except ValueError:
         return False
