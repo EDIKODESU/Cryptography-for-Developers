@@ -25,7 +25,7 @@ def find_primitive_root(p):
 
 def generate_keys(p, g):
     while True:
-        a = random.randint(1, p - 1)  # Private key (1 <= a <= p-2)
+        a = random.randint(1, p - 1)  # Private key
         if math.gcd(a, p - 1) == 1:
             break
 
